@@ -53,12 +53,15 @@
   },
   "tsconfig": {
     "compilerOptions": {
-      "target": "ES6",
+      "target": "es2020",
       "module": "CommonJS",
       "outDir": "./dist",
       "rootDir": "./",
       "strict": true,
-      "esModuleInterop": true
+      "esModuleInterop": true,
+      "lib": [
+        "es2020"
+      ]
     }
   }
 }

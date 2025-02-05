@@ -1,9 +1,11 @@
-{"compilerOptions": {
-      "target": "ES6",
-      "module": "CommonJS",
-      "outDir": "./dist",
-      "rootDir": "./",
-      "strict": true,
-      "esModuleInterop": true
-    }
+{
+  "compilerOptions": {
+    "outDir": "./dist",
+    "rootDir": "./",
+    "strict": true,
+    "esModuleInterop": true,
+    "lib": ["es2020"],
+    "module": "commonjs",
+    "target": "es2020"
   }
+}
