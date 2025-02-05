@@ -96,10 +96,6 @@ app.post('/fisher4h', express.text(), async (req: Request, res: Response) => {
   }
 });
 
-app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
-});
-
 /* ===== TEXT ALERT ENDPOINT ===== */
 // @ts-expect-error shut up
 app.post('/fisher1d', express.text(), async (req: Request, res: Response) => {
