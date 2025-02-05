@@ -45,18 +45,15 @@ type Alert = {
   timeframe: Timeframe;
 };
 
-// Middleware to parse JSON requests
-app.use(express.json());
-
 // Root endpoint
 // @ts-expect-error shut up
-app.post('/', async (req: Request, res: Response) => {
+app.post('/', express.json(), async (req: Request, res: Response) => {
   const receivedAlert = req.body as Alert;
   const { symbol, timeframe, pattern } = receivedAlert;
   try {
     const channel = (await client.channels.fetch(
       (timeframe === '4h'
-        ? process.env.DISCORD_CHANNEL_ID_4h
+        ? process.env.DISCORD_CHANNEL_ID_4H
         : timeframe === '1D'
           ? process.env.DISCORD_CHANNEL_ID_1D
           : timeframe === '1W'
@@ -72,6 +69,56 @@ app.post('/', async (req: Request, res: Response) => {
     return res.json({ message: 'Message sent to Discord!' });
   } catch (error) {
     console.error('Error sending message:', error);
+    return res.status(500).json({ error: 'Failed to send message' });
+  }
+});
+
+/* ===== TEXT ALERT ENDPOINT ===== */
+// @ts-expect-error shut up
+app.post('/fisher4h', express.text(), async (req: Request, res: Response) => {
+  const message = req.body as string;
+  console.log('Received text alert:', message);
+
+  try {
+    const channel = (await client.channels.fetch(
+      process.env.DISCORD_CHANNEL_ID_FISHER_4H as string,
+    )) as TextChannel;
+
+    if (!channel) {
+      return res.status(500).json({ error: 'Channel not found' });
+    }
+
+    await channel.send(`📢 Alert Received:\n${message}`);
+    return res.json({ message: 'Text alert sent to Discord!' });
+  } catch (error) {
+    console.error('Error sending text alert:', error);
+    return res.status(500).json({ error: 'Failed to send message' });
+  }
+});
+
+app.listen(PORT, () => {
+  console.log(`Server is running on http://localhost:${PORT}`);
+});
+
+/* ===== TEXT ALERT ENDPOINT ===== */
+// @ts-expect-error shut up
+app.post('/fisher1d', express.text(), async (req: Request, res: Response) => {
+  const message = req.body as string;
+  console.log('Received text alert:', message);
+
+  try {
+    const channel = (await client.channels.fetch(
+      process.env.DISCORD_CHANNEL_ID_FISHER_1D as string,
+    )) as TextChannel;
+
+    if (!channel) {
+      return res.status(500).json({ error: 'Channel not found' });
+    }
+
+    await channel.send(`📢 Alert Received:\n${message}`);
+    return res.json({ message: 'Text alert sent to Discord!' });
+  } catch (error) {
+    console.error('Error sending text alert:', error);
     return res.status(500).json({ error: 'Failed to send message' });
   }
 });
